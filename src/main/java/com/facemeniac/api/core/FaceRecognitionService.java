@@ -35,13 +35,15 @@ public class FaceRecognitionService implements IFaceRecognitionService {
 	}
 	
 	// Métodos
-	public boolean Compare(String imageUrl) throws UnirestException {
-		if (DetectFace(imageUrl) == false) { return false; }
-		if (AddNewFaceToGallery() == false) { return false; }
-		if (PerformRecognition() == false) { return false; }
+	public String Compare(String imageUrl) throws UnirestException {
+		String name = "";
+		
+		if (DetectFace(imageUrl) == false) { return null; }
+		if (AddNewFaceToGallery() == false) { return null; }
+		if ((name = PerformRecognition()) != null) { return null; }
 		RemoveSubject();
 		
-		return true;
+		return name;
 	}
 	public boolean AddNew(String imageUrl, String subjectName) throws UnirestException {
 		this.subjectName = subjectName;
@@ -101,7 +103,7 @@ public class FaceRecognitionService implements IFaceRecognitionService {
 
 		return true;
 	}
-	protected boolean PerformRecognition() throws UnirestException {
+	protected String PerformRecognition() throws UnirestException {
 		HttpResponse<JsonNode> response = Unirest.get("https://animetrics.p.mashape.com/recognize?api_key=0f8558377b42fdad1804207be01b711e&gallery_id=" + GALLERY_NAME + "&height=" + results.getHeight() + "&image_id=" + results.getImage_id() + "&subject_id=" + this.subjectName + "&topLeftX=" + results.getTopLeftX() + "&topLeftY=" + results.getTopLeftY() + "&width=" + results.getWidth())
 			.header("X-Mashape-Key", "05rwWuExM7msh8x5i1GvbAIQejmgp1vRG3njsnfopCqhMqmL9E")
 			.header("Accept", "application/json")
@@ -135,14 +137,12 @@ public class FaceRecognitionService implements IFaceRecognitionService {
 			
 			System.out.println("Nome do miliante!! > " + miliantName);
 			
-			return true;
+			return miliantName;
 			
 		} catch(Exception e) {
 			System.out.println("catch");
-			return false;
-			
+			return null;
 		}
-		
 	}
 	protected void RemoveSubject() throws UnirestException {
 		HttpResponse<JsonNode> response = Unirest.get("https://animetrics.p.mashape.com/remove_from_gallery?api_key=" + API_KEY + "&gallery_id=" + GALLERY_NAME + "&subject_id=" + this.subjectName)

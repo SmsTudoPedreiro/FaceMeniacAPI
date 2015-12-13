@@ -1,9 +1,12 @@
 package com.facemeniac.api;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.facemeniac.api.core.FaceRecognitionService;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -11,7 +14,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 /**
  * Root resource (exposed at "myresource" path)
  */
-@Path("/form/compare")
+@Path("/compare")
 public class MyResource {
 
     /**
@@ -20,23 +23,23 @@ public class MyResource {
      *
      * @return String that will be returned as a text/plain response.
      */
-    @POST
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getIt() {
-    	DoCompare();
+    @GET
+    @Path("/{param}")
+    public Response getIt(@PathParam("param") String msg) {
+    	//DoCompare();
     	
-    	
-    	
-    	return "Hello, Heroku!";
+    	return Response.status(200).entity(DoCompare("http://tudopedreirorj.netai.net/" + msg + ".jpg")).build();
     }
     
-    public void DoCompare() {
+    public String DoCompare(String url) {
     	try {
     		FaceRecognitionService f = new FaceRecognitionService();
     		//f.AddNew("http://i.telegraph.co.uk/multimedia/archive/01242/franck_ribery_1242993a.jpg", "ribery");
-			f.Compare("http://www.impactonline.co/images/articles/people/gollumx2.jpg");
+			return f.Compare(url);
 		} catch (UnirestException e) {
 			e.printStackTrace();
 		}
+    	
+    	return null;
     }
 }

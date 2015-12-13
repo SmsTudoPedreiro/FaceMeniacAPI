@@ -10,6 +10,6 @@ public interface IFaceRecognitionService {
 	 * @param imageUrl
 	 * @throws UnirestException 
 	 */
-	public boolean Compare(String imageUrl) throws UnirestException;
+	public String Compare(String imageUrl) throws UnirestException;
 	public boolean AddNew(String imageUrl, String subjectName) throws UnirestException;
 }
