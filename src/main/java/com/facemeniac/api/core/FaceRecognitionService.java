@@ -40,7 +40,7 @@ public class FaceRecognitionService implements IFaceRecognitionService {
 		
 		if (DetectFace(imageUrl) == false) { return null; }
 		if (AddNewFaceToGallery() == false) { return null; }
-		if ((name = PerformRecognition()) != null) { return null; }
+		if ((name = PerformRecognition()) == null) { return null; }
 		RemoveSubject();
 		
 		return name;

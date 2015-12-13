@@ -35,7 +35,10 @@ public class MyResource {
     	try {
     		FaceRecognitionService f = new FaceRecognitionService();
     		//f.AddNew("http://i.telegraph.co.uk/multimedia/archive/01242/franck_ribery_1242993a.jpg", "ribery");
-			return f.Compare(url);
+			String nm = f.Compare(url);
+    		System.out.println("Retorno: " + nm);
+			
+			return nm;
 		} catch (UnirestException e) {
 			e.printStackTrace();
 		}
